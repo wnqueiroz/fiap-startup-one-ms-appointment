@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    container_name: nestjs-api-boilerplate-db
+    container_name: ms-appointment-db
     image: postgres:13.1
     ports:
       - ${TYPEORM_PORT}:5432
@@ -12,7 +12,7 @@ services:
       POSTGRES_DB: ${TYPEORM_DATABASE}
 
   app:
-    container_name: nestjs-api-boilerplate
+    container_name: ms-appointment
     build: .
     ports:
       - 3000:${PORT}
