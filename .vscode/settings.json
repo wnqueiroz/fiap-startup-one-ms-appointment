@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    ".{huskyrc,lintstagedrc}": "json"
+  },
+  "editor.formatOnSave": true
+}
