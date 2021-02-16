@@ -1,7 +1,7 @@
 {
   "name": "ms-appointment",
   "version": "0.0.3",
-  "description": "",
+  "description": "Microservice to centralize business rules related only to the appointments",
   "author": {
     "name": "William Queiroz",
     "email": "wnqueiroz@outlook.com"
