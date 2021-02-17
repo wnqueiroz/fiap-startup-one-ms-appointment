@@ -6,6 +6,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -14,6 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { KAFKA_TOPICS } from 'src/contants';
 import { RefOneParams } from 'src/utils/validation';
 import { ServicePeriodDTO } from './dtos/service-period.dto';
 import { ServicesService } from './services.service';
@@ -49,5 +51,29 @@ export class ServicesController {
     return periodsEntities.map(
       serviceEntity => new ServicePeriodDTO(serviceEntity),
     );
+  }
+
+  @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_CREATED)
+  async createPeriods(
+    @Payload()
+    message: {
+      value: {
+        period;
+      };
+    },
+  ): Promise<void> {
+    await this.servicesService.createPeriods(message.value);
+  }
+
+  @MessagePattern(KAFKA_TOPICS.SERVICES_CREATED)
+  async createServices(
+    @Payload()
+    message: {
+      value: {
+        service;
+      };
+    },
+  ): Promise<void> {
+    await this.servicesService.createServices(message.value);
   }
 }
