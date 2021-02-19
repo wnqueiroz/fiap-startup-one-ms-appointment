@@ -53,18 +53,6 @@ export class ServicesController {
     );
   }
 
-  @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_CREATED)
-  async createPeriods(
-    @Payload()
-    message: {
-      value: {
-        period;
-      };
-    },
-  ): Promise<void> {
-    await this.servicesService.createPeriods(message.value);
-  }
-
   @MessagePattern(KAFKA_TOPICS.SERVICES_CREATED)
   async createServices(
     @Payload()
@@ -74,6 +62,54 @@ export class ServicesController {
       };
     },
   ): Promise<void> {
-    await this.servicesService.createServices(message.value);
+    await this.servicesService.createService(message.value);
+  }
+
+  @MessagePattern(KAFKA_TOPICS.SERVICES_UPDATED)
+  async updateServices(
+    @Payload()
+    message: {
+      value: {
+        service;
+      };
+    },
+  ): Promise<void> {
+    await this.servicesService.updateService(message.value);
+  }
+
+  @MessagePattern(KAFKA_TOPICS.SERVICES_DELETED)
+  async deleteServices(
+    @Payload()
+    message: {
+      value: {
+        service;
+      };
+    },
+  ): Promise<void> {
+    await this.servicesService.deleteService(message.value);
+  }
+
+  @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_CREATED)
+  async createPeriod(
+    @Payload()
+    message: {
+      value: {
+        period;
+      };
+    },
+  ): Promise<void> {
+    await this.servicesService.createPeriod(message.value);
+  }
+
+  @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_DELETED)
+  async deletePeriod(
+    @Payload()
+    message: {
+      value: {
+        period;
+      };
+    },
+  ): Promise<void> {
+    await this.servicesService.deletePeriod(message.value);
   }
 }

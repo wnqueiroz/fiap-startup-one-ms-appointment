@@ -50,6 +50,11 @@ export class ServicePeriodsEntity {
   @Column({ nullable: false })
   name: string;
 
+  @Column({
+    nullable: false,
+  })
+  removed: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
