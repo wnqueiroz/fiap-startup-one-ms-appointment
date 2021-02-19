@@ -82,11 +82,9 @@ export class AppointmentsController {
     description: 'The record has been successfully canceled.',
     type: AppointmentDTO,
   })
-  async cancel(@Param() params: RefOneParams): Promise<AppointmentDTO> {
+  async cancel(@Param() params: RefOneParams): Promise<void> {
     const { id } = params;
 
-    const entity = await this.appointmentsService.cancel(id);
-
-    return new AppointmentDTO(entity);
+    await this.appointmentsService.cancel(id);
   }
 }
