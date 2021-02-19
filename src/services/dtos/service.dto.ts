@@ -24,6 +24,11 @@ export class ServiceDTO {
   createdAt: Date;
 
   @ApiProperty({
+    example: true || false,
+  })
+  removed: boolean;
+
+  @ApiProperty({
     example: '2021-02-12T19:16:03.971Z',
   })
   updatedAt: Date;

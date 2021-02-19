@@ -26,6 +26,11 @@ export class ServiceEntity {
   })
   idCompany: string;
 
+  @Column({
+    nullable: false,
+  })
+  removed: boolean;
+
   @ManyToOne(
     () => AppointmentEntity,
     _ => _.id,

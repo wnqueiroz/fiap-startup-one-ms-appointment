@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { APPOINTMENT_STATUS } from 'src/contants';
 import { ServicePeriodsEntity } from 'src/services/service-periods.entity';
 import { ServiceEntity } from 'src/services/service.entity';
 import { Repository } from 'typeorm';
@@ -37,12 +38,12 @@ export class AppointmentsService {
     return appointmentEntity;
   }
 
-  async cancel(id: string): Promise<AppointmentEntity> {
+  async cancel(id: string): Promise<void> {
     const appointmentEntity = await this.getOne(id);
 
-    return this.appointmenRepository.save({
+    this.appointmenRepository.save({
       ...appointmentEntity,
-      ...{ idAppointmentStatus: '4423B247-3044-4141-8B1E-CB5B8940660E' },
+      ...{ idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTUMER },
     });
   }
 
@@ -63,7 +64,7 @@ export class AppointmentsService {
 
     const appointmentEntity = this.appointmenRepository.create({
       ...createAppointmentDTO,
-      ...{ idAppointmentStatus: '7E20F944-8204-45BE-AA06-2E5C29B9A62D' },
+      ...{ idAppointmentStatus: APPOINTMENT_STATUS.PENDING },
     });
 
     return await this.appointmenRepository.save(appointmentEntity);
