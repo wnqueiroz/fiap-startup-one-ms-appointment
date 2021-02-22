@@ -1,11 +1,12 @@
-import { ServicePeriodsEntity } from 'src/services/service-periods.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ServiceEntity } from './service.entity';
+
+import { APPOINTMENT_STATUS } from '../contants';
+import { ServicePeriodsEntity } from '../services/service-periods.entity';
 import { ServicePeriodDTO } from './dtos/service-period.dto';
 import { ServiceDTO } from './dtos/service.dto';
-import { APPOINTMENT_STATUS } from 'src/contants';
+import { ServiceEntity } from './service.entity';
 
 type KafkaObject = {
   service?: ServiceDTO;

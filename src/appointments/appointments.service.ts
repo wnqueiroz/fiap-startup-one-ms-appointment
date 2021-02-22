@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { APPOINTMENT_STATUS } from 'src/contants';
-import { ServicePeriodsEntity } from 'src/services/service-periods.entity';
-import { ServiceEntity } from 'src/services/service.entity';
 import { Repository } from 'typeorm';
+
+import { APPOINTMENT_STATUS } from '../contants';
+import { ServicePeriodsEntity } from '../services/service-periods.entity';
+import { ServiceEntity } from '../services/service.entity';
 import { AppointmentEntity } from './appointment.entity';
 import { CreateAppointmentDTO } from './dtos/create-appointment.dto';
 import { UpdateAppointmentDTO } from './dtos/update-appointment.dto';

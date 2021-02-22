@@ -16,11 +16,12 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetCurrentUser } from 'src/auth/auth.annotation';
-import { AuthService } from 'src/auth/auth.service';
-import { CurrentUserDTO } from 'src/auth/dto/current-user.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RefOneParams } from 'src/utils/validation';
+
+import { GetCurrentUser } from '../auth/auth.annotation';
+import { AuthService } from '../auth/auth.service';
+import { CurrentUserDTO } from '../auth/dto/current-user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RefOneParams } from '../utils/validation';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentDTO } from './dtos/appointment.dto';
 import { CreateAppointmentDTO } from './dtos/create-appointment.dto';

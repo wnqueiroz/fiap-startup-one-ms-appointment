@@ -14,9 +14,10 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { KAFKA_TOPICS } from 'src/contants';
-import { RefOneParams } from 'src/utils/validation';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { KAFKA_TOPICS } from '../contants';
+import { RefOneParams } from '../utils/validation';
 import { ServicePeriodDTO } from './dtos/service-period.dto';
 import { ServicesService } from './services.service';
 

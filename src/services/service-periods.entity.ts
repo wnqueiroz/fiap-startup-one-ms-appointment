@@ -1,4 +1,3 @@
-import { AppointmentEntity } from 'src/appointments/appointment.entity';
 import {
   Entity,
   Column,
@@ -10,6 +9,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { AppointmentEntity } from '../appointments/appointment.entity';
 import { ServiceEntity } from './service.entity';
 
 @Entity({

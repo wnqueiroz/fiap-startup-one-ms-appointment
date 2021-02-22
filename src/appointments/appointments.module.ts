@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientOptions, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppointmentsService } from './appointments.service';
-import { AppointmentsController } from './appointments.controller';
+import { AuthModule } from '../auth/auth.module';
+import { KAFKA_CLIENTS } from '../contants';
+import { RefOneParams } from '../utils/validation';
 import { AppointmentEntity } from './appointment.entity';
-import { RefOneParams } from 'src/utils/validation';
-import { AuthModule } from 'src/auth/auth.module';
-import { ClientOptions, ClientsModule, Transport } from '@nestjs/microservices';
-import { KAFKA_CLIENTS } from 'src/contants';
-import { ConfigService } from '@nestjs/config';
+import { AppointmentsController } from './appointments.controller';
+import { AppointmentsService } from './appointments.service';
 
 const ServicesKafkaClient = ClientsModule.registerAsync([
   {

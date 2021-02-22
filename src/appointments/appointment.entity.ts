@@ -1,5 +1,3 @@
-import { ServicePeriodsEntity } from 'src/services/service-periods.entity';
-import { ServiceEntity } from 'src/services/service.entity';
 import {
   Entity,
   Column,
@@ -9,6 +7,9 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
+
+import { ServicePeriodsEntity } from '../services/service-periods.entity';
+import { ServiceEntity } from '../services/service.entity';
 import { AppointmentStatusEntity } from './appointment-status.entity';
 
 @Entity({
