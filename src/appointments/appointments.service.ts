@@ -39,12 +39,12 @@ export class AppointmentsService {
     return appointmentEntity;
   }
 
-  async cancel(id: string): Promise<void> {
+  async cancel(id: string): Promise<AppointmentEntity> {
     const appointmentEntity = await this.getOne(id);
 
-    this.appointmenRepository.save({
+    return this.appointmenRepository.save({
       ...appointmentEntity,
-      ...{ idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTUMER },
+      idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTUMER,
     });
   }
 
@@ -65,7 +65,7 @@ export class AppointmentsService {
 
     const appointmentEntity = this.appointmenRepository.create({
       ...createAppointmentDTO,
-      ...{ idAppointmentStatus: APPOINTMENT_STATUS.PENDING },
+      idAppointmentStatus: APPOINTMENT_STATUS.PENDING,
     });
 
     return await this.appointmenRepository.save(appointmentEntity);

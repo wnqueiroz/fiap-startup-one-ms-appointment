@@ -58,7 +58,7 @@ export class AppointmentsController {
 
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ summary: 'Create a company' })
+  @ApiOperation({ summary: 'Create an appointment' })
   @ApiCreatedResponse({
     description: 'The record has been successfully created.',
     type: AppointmentDTO,
@@ -73,7 +73,7 @@ export class AppointmentsController {
 
   @Post('/:id/cancel')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ summary: 'Cancel one appointment' })
+  @ApiOperation({ summary: 'Cancel an appointment' })
   @ApiParam({
     name: 'id',
     type: 'string',
@@ -83,9 +83,11 @@ export class AppointmentsController {
     description: 'The record has been successfully canceled.',
     type: AppointmentDTO,
   })
-  async cancel(@Param() params: RefOneParams): Promise<void> {
+  async cancel(@Param() params: RefOneParams): Promise<AppointmentDTO> {
     const { id } = params;
 
-    await this.appointmentsService.cancel(id);
+    const entity = await this.appointmentsService.cancel(id);
+
+    return new AppointmentDTO(entity);
   }
 }
