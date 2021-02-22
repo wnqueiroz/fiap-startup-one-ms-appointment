@@ -18,7 +18,6 @@ import {
 } from '@nestjs/swagger';
 
 import { GetCurrentUser } from '../auth/auth.annotation';
-import { AuthService } from '../auth/auth.service';
 import { CurrentUserDTO } from '../auth/dto/current-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RefOneParams } from '../utils/validation';
@@ -32,10 +31,7 @@ import { CreateAppointmentDTO } from './dtos/create-appointment.dto';
 @Controller('/v1/appointments')
 @Controller()
 export class AppointmentsController {
-  constructor(
-    private readonly appointmentsService: AppointmentsService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
@@ -49,10 +45,10 @@ export class AppointmentsController {
     @GetCurrentUser() user: CurrentUserDTO,
   ): Promise<AppointmentDTO[]> {
     const { id: idUser } = user;
-    const companyEntities = await this.appointmentsService.getAll(idUser);
+    const appointmentEntities = await this.appointmentsService.getAll(idUser);
 
-    return companyEntities.map(
-      companyEntity => new AppointmentDTO(companyEntity),
+    return appointmentEntities.map(
+      appointmentEntity => new AppointmentDTO(appointmentEntity),
     );
   }
 
@@ -66,9 +62,11 @@ export class AppointmentsController {
   async create(
     @Body() createAppointmentDTO: CreateAppointmentDTO,
   ): Promise<AppointmentDTO> {
-    const entity = await this.appointmentsService.create(createAppointmentDTO);
+    const appointmentEntity = await this.appointmentsService.create(
+      createAppointmentDTO,
+    );
 
-    return new AppointmentDTO(entity);
+    return new AppointmentDTO(appointmentEntity);
   }
 
   @Post('/:id/cancel')
@@ -86,8 +84,8 @@ export class AppointmentsController {
   async cancel(@Param() params: RefOneParams): Promise<AppointmentDTO> {
     const { id } = params;
 
-    const entity = await this.appointmentsService.cancel(id);
+    const appointmentEntity = await this.appointmentsService.cancel(id);
 
-    return new AppointmentDTO(entity);
+    return new AppointmentDTO(appointmentEntity);
   }
 }

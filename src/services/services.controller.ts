@@ -31,7 +31,7 @@ export class ServicesController {
 
   @Get('/:id/available-periods')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ summary: 'Get all periods avaiable from service' })
+  @ApiOperation({ summary: 'Get all periods available from service' })
   @ApiParam({
     name: 'id',
     type: 'string',
@@ -47,10 +47,12 @@ export class ServicesController {
   ): Promise<ServicePeriodDTO[]> {
     const { id } = params;
 
-    const periodsEntities = await this.servicesService.getAvailablePeriods(id);
+    const servicePeriodsEntities = await this.servicesService.getAvailablePeriods(
+      id,
+    );
 
-    return periodsEntities.map(
-      serviceEntity => new ServicePeriodDTO(serviceEntity),
+    return servicePeriodsEntities.map(
+      servicePeriodEntity => new ServicePeriodDTO(servicePeriodEntity),
     );
   }
 
