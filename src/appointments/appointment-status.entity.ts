@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+
 import { AppointmentEntity } from './appointment.entity';
 
 @Entity({
