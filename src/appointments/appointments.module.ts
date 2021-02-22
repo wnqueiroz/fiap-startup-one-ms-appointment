@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/auth.module';
 import { KAFKA_CLIENTS } from '../contants';
+import { ServicePeriodsEntity } from '../services/service-periods.entity';
+import { ServiceEntity } from '../services/service.entity';
 import { RefOneParams } from '../utils/validation';
 import { AppointmentEntity } from './appointment.entity';
 import { AppointmentsController } from './appointments.controller';
@@ -39,7 +41,11 @@ const ServicesKafkaClient = ClientsModule.registerAsync([
 @Module({
   imports: [
     RefOneParams,
-    TypeOrmModule.forFeature([AppointmentEntity]),
+    TypeOrmModule.forFeature([
+      AppointmentEntity,
+      ServiceEntity,
+      ServicePeriodsEntity,
+    ]),
     AuthModule,
     ServicesKafkaClient,
   ],
