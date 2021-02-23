@@ -2,13 +2,15 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppointmentsModule } from './appointments/appointments.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
+    ServicesModule,
+    AppointmentsModule,
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig],
       isGlobal: true,
@@ -21,7 +23,5 @@ import databaseConfig from './config/database.config';
         configService.get('database'),
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
