@@ -44,8 +44,9 @@ export class AppointmentsController {
   async getAll(
     @GetCurrentUser() user: CurrentUserDTO,
   ): Promise<AppointmentDTO[]> {
-    const { id: idUser } = user;
-    const appointmentEntities = await this.appointmentsService.getAll(idUser);
+    const { id } = user;
+
+    const appointmentEntities = await this.appointmentsService.getAll(id);
 
     return appointmentEntities.map(
       appointmentEntity => new AppointmentDTO(appointmentEntity),
@@ -61,8 +62,12 @@ export class AppointmentsController {
   })
   async create(
     @Body() createAppointmentDTO: CreateAppointmentDTO,
+    @GetCurrentUser() user: CurrentUserDTO,
   ): Promise<AppointmentDTO> {
+    const { id } = user;
+
     const appointmentEntity = await this.appointmentsService.create(
+      id,
       createAppointmentDTO,
     );
 

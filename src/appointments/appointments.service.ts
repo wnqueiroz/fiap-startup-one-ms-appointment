@@ -13,7 +13,7 @@ import { UpdateAppointmentDTO } from './dtos/update-appointment.dto';
 export class AppointmentsService {
   constructor(
     @InjectRepository(AppointmentEntity)
-    private appointmenRepository: Repository<AppointmentEntity>,
+    private appointmentRepository: Repository<AppointmentEntity>,
     @InjectRepository(ServiceEntity)
     private serviceRepository: Repository<ServiceEntity>,
     @InjectRepository(ServicePeriodsEntity)
@@ -21,16 +21,17 @@ export class AppointmentsService {
   ) {}
 
   getAll(idUser: string): Promise<AppointmentEntity[]> {
-    return this.appointmenRepository.find({
+    return this.appointmentRepository.find({
       where: {
         idUser,
       },
+      relations: ['service', 'servicePeriod', 'appointmentStatus'],
     });
   }
 
   async getOne(id: string): Promise<AppointmentEntity> {
-    const appointmentEntity = await this.appointmenRepository.findOne(id, {
-      relations: ['servicePeriods'],
+    const appointmentEntity = await this.appointmentRepository.findOne(id, {
+      relations: ['servicePeriod'],
     });
 
     if (!appointmentEntity)
@@ -42,13 +43,17 @@ export class AppointmentsService {
   async cancel(id: string): Promise<AppointmentEntity> {
     const appointmentEntity = await this.getOne(id);
 
-    return this.appointmenRepository.save({
+    // TODO: cancel only appointment that not canceled by customer or system
+
+    return this.appointmentRepository.save({
       ...appointmentEntity,
-      idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTUMER,
+      idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTOMER,
     });
   }
 
+  // TODO: check payload returned from this
   async create(
+    idUser: string,
     createAppointmentDTO: CreateAppointmentDTO,
   ): Promise<AppointmentEntity> {
     const serviceExists = await this.serviceRepository.findOne(
@@ -57,18 +62,22 @@ export class AppointmentsService {
 
     if (!serviceExists) throw new NotFoundException('Service not found');
 
-    const periodoExists = await this.servicePeriodsRepository.findOne(
+    const servicePeriodExists = await this.servicePeriodsRepository.findOne(
       createAppointmentDTO.idServicePeriod,
     );
 
-    if (!periodoExists) throw new NotFoundException('Period not found');
+    if (!servicePeriodExists)
+      throw new NotFoundException('Service period not found');
 
-    const appointmentEntity = this.appointmenRepository.create({
+    // TODO: check if the service period is available (check if the appointment with that service period already exists)
+
+    const appointmentEntity = this.appointmentRepository.create({
       ...createAppointmentDTO,
+      idUser,
       idAppointmentStatus: APPOINTMENT_STATUS.PENDING,
     });
 
-    return await this.appointmenRepository.save(appointmentEntity);
+    return this.appointmentRepository.save(appointmentEntity);
   }
 
   async updateOne(
@@ -77,7 +86,7 @@ export class AppointmentsService {
   ): Promise<AppointmentEntity> {
     const appointmentEntity = await this.getOne(id);
 
-    return this.appointmenRepository.save({
+    return this.appointmentRepository.save({
       ...appointmentEntity,
       ...updateAppointmentDTO,
     });

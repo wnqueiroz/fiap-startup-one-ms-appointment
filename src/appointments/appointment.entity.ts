@@ -8,6 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 
+import { APPOINTMENT_STATUS } from '../contants';
 import { ServicePeriodsEntity } from '../services/service-periods.entity';
 import { ServiceEntity } from '../services/service.entity';
 import { AppointmentStatusEntity } from './appointment-status.entity';
@@ -36,6 +37,7 @@ export class AppointmentEntity {
 
   @Column('uuid', {
     nullable: false,
+    default: APPOINTMENT_STATUS.PENDING,
   })
   idAppointmentStatus: string;
 
@@ -44,24 +46,24 @@ export class AppointmentEntity {
 
   @ManyToOne(
     () => ServiceEntity,
-    _ => _.id,
+    service => service.id,
   )
   @JoinColumn({ name: 'idService' })
   service: ServiceEntity;
 
   @ManyToOne(
     () => ServicePeriodsEntity,
-    _ => _.id,
+    servicePeriod => servicePeriod.id,
   )
   @JoinColumn({ name: 'idServicePeriod' })
-  period: ServicePeriodsEntity;
+  servicePeriod: ServicePeriodsEntity;
 
   @ManyToOne(
     () => AppointmentStatusEntity,
-    _ => _.id,
+    appointmentStatus => appointmentStatus.id,
   )
   @JoinColumn({ name: 'idAppointmentStatus' })
-  status: AppointmentStatusEntity;
+  appointmentStatus: AppointmentStatusEntity;
 
   @CreateDateColumn()
   createdAt: Date;

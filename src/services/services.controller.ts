@@ -23,7 +23,6 @@ import { ServicesService } from './services.service';
 
 @ApiTags('services')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('/v1/services')
 @Controller()
 export class ServicesController {
@@ -31,6 +30,7 @@ export class ServicesController {
 
   @Get('/:id/available-periods')
   @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all periods available from service' })
   @ApiParam({
     name: 'id',
@@ -65,7 +65,15 @@ export class ServicesController {
       };
     },
   ): Promise<void> {
-    await this.servicesService.createService(message.value);
+    const { id, idCompany, name, createdAt, updatedAt } = message.value as any;
+
+    await this.servicesService.createService({
+      name,
+      idCompany,
+      id,
+      createdAt,
+      updatedAt,
+    });
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICES_UPDATED)
@@ -77,7 +85,12 @@ export class ServicesController {
       };
     },
   ): Promise<void> {
-    await this.servicesService.updateService(message.value);
+    const { id, name, updatedAt } = message.value as any;
+
+    await this.servicesService.updateService(id, {
+      name,
+      updatedAt,
+    });
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICES_DELETED)
@@ -89,7 +102,9 @@ export class ServicesController {
       };
     },
   ): Promise<void> {
-    await this.servicesService.deleteService(message.value);
+    const { id } = message.value as any;
+
+    await this.servicesService.deleteService(id);
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_CREATED)
@@ -101,7 +116,7 @@ export class ServicesController {
       };
     },
   ): Promise<void> {
-    await this.servicesService.createPeriod(message.value);
+    await this.servicesService.createPeriod(message.value as any);
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_DELETED)
@@ -113,6 +128,8 @@ export class ServicesController {
       };
     },
   ): Promise<void> {
-    await this.servicesService.deletePeriod(message.value);
+    const { id } = message.value as any;
+
+    await this.servicesService.deletePeriod(id);
   }
 }

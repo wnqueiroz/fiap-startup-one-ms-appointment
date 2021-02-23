@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   OneToMany,
 } from 'typeorm';
 
@@ -28,18 +27,25 @@ export class ServiceEntity {
 
   @Column({
     nullable: false,
+    default: false,
   })
   removed: boolean;
 
-  @ManyToOne(
+  @OneToMany(
     () => AppointmentEntity,
-    _ => _.id,
+    appointment => appointment.service,
+    {
+      cascade: true, // TODO: check to use onUpdate: true instead this
+    },
   )
   appointments: AppointmentEntity[];
 
   @OneToMany(
     () => ServicePeriodsEntity,
-    _ => _.service,
+    servicePeriod => servicePeriod.service,
+    {
+      cascade: true, // TODO: check to use onUpdate: true instead this
+    },
   )
   servicePeriods: ServicePeriodsEntity[];
 

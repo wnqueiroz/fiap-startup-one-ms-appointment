@@ -4,14 +4,10 @@ import { Repository } from 'typeorm';
 
 import { APPOINTMENT_STATUS } from '../contants';
 import { ServicePeriodsEntity } from '../services/service-periods.entity';
+import { CreateServiceDTO } from './dtos/create-service.dto';
 import { ServicePeriodDTO } from './dtos/service-period.dto';
-import { ServiceDTO } from './dtos/service.dto';
+import { UpdateServiceDTO } from './dtos/update-service.dto';
 import { ServiceEntity } from './service.entity';
-
-type KafkaObject = {
-  service?: ServiceDTO;
-  period?: ServicePeriodDTO;
-};
 
 @Injectable()
 export class ServicesService {
@@ -37,9 +33,7 @@ export class ServicesService {
     });
   }
 
-  async createPeriod(params: KafkaObject): Promise<void> {
-    const { period } = params;
-
+  async createPeriod(period: ServicePeriodDTO): Promise<void> {
     const serviceExists = await this.servicesRepository.findOne(
       period.idService,
     );
@@ -53,39 +47,36 @@ export class ServicesService {
     await this.servicePeriodsRepository.save(periodEntity);
   }
 
-  async createService(params: KafkaObject): Promise<void> {
-    const { service } = params;
-
-    const serviceEntity = this.servicesRepository.create({
-      ...service,
-    });
+  async createService(createServiceDTO: CreateServiceDTO): Promise<void> {
+    const serviceEntity = this.servicesRepository.create(createServiceDTO);
 
     await this.servicesRepository.save(serviceEntity);
   }
 
-  async deleteService(params: KafkaObject): Promise<void> {
-    const { service } = params;
-
-    const entity = await this.servicesRepository.findOne(service.id, {
-      relations: ['servicePeriods'],
+  async deleteService(idService: string): Promise<void> {
+    const entity = await this.servicesRepository.findOne(idService, {
+      relations: ['servicePeriods', 'appointments'],
     });
 
     entity.removed = true;
 
-    entity.servicePeriods.map(period => (period.removed = true));
+    if (entity.servicePeriods)
+      entity.servicePeriods = entity.servicePeriods.map(servicePeriods => ({
+        ...servicePeriods,
+        removed: true,
+      }));
 
-    entity.appointments.map(
-      appointment =>
-        (appointment.idAppointmentStatus = APPOINTMENT_STATUS.CANCEL_SYSTEM),
-    );
+    if (entity.appointments)
+      entity.appointments = entity.appointments.map(appointment => ({
+        ...appointment,
+        idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_SYSTEM,
+      }));
 
     await this.servicesRepository.save(entity);
   }
 
-  async deletePeriod(params: KafkaObject): Promise<void> {
-    const { period } = params;
-
-    const entity = await this.servicePeriodsRepository.findOne(period.id);
+  async deletePeriod(idServicePeriod: string): Promise<void> {
+    const entity = await this.servicePeriodsRepository.findOne(idServicePeriod);
 
     entity.appointments.map(
       appointment =>
@@ -97,16 +88,17 @@ export class ServicesService {
     await this.servicesRepository.save(entity);
   }
 
-  async updateService(params: KafkaObject): Promise<void> {
-    const { service } = params;
-
-    const entity = await this.servicesRepository.findOne(service.id);
+  async updateService(
+    idService: string,
+    payload: UpdateServiceDTO,
+  ): Promise<void> {
+    const entity = await this.servicesRepository.findOne(idService);
 
     if (!entity) throw new NotFoundException('Service not found');
 
-    await this.servicePeriodsRepository.save({
+    await this.servicesRepository.save({
       ...entity,
-      ...service,
+      ...payload,
     });
   }
 }

@@ -26,14 +26,14 @@ export class ServicePeriodsEntity {
 
   @ManyToOne(
     () => ServiceEntity,
-    _ => _.id,
+    service => service.id,
   )
   @JoinColumn({ name: 'idService' })
   service: ServiceEntity;
 
   @OneToMany(
     () => AppointmentEntity,
-    _ => _.id,
+    appointment => appointment.id,
   )
   appointments: AppointmentEntity[];
 
@@ -47,11 +47,9 @@ export class ServicePeriodsEntity {
   })
   endTime: string;
 
-  @Column({ nullable: false })
-  name: string;
-
   @Column({
     nullable: false,
+    default: false,
   })
   removed: boolean;
 

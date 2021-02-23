@@ -21,9 +21,9 @@ export class AppointmentStatusEntity {
 
   @OneToMany(
     () => AppointmentEntity,
-    _ => _.id,
+    appointment => appointment.id,
   )
-  service: AppointmentEntity[];
+  appointments: AppointmentEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

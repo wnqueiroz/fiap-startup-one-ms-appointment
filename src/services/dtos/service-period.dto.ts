@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class ServicePeriodDTO {
   @ApiProperty({
@@ -21,9 +22,7 @@ export class ServicePeriodDTO {
   })
   endTime: string;
 
-  @ApiProperty({
-    example: true || false,
-  })
+  @Exclude()
   removed: boolean;
 
   @ApiProperty({
