@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/0.0.9...0.0.10) (2021-02-23)
+
+
+### Correções de erros
+
+* **bootstrap:** added entities on TypeORM module import ([fe7ff2f](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/fe7ff2fdcf6923137c05a06dde987124263e4439))
+* build adjustment ([16ef207](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/16ef20759db53c43fde7f88a3dbafdf2bd76e6fd))
+
+
+### Funcionalidades
+
+* add new services ([706c025](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/706c02517d4208fa9457d50641b8aad89137d8aa))
+* applying suggestions from Pull Request ([3bb162d](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/3bb162dbefeafcebaab89ed01816611e4e4b8c31))
+* new services ([547c810](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/547c810a86c83d3ac587b01275c8e2b069f35ce2))
+* receiver kafka data ([3b9b6b8](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/3b9b6b8e8ed4be033b5d6d525e06cf79f2172202))
+
 ### [0.0.9](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/0.0.8...0.0.9) (2021-02-22)
 
 ### [0.0.8](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/0.0.7...0.0.8) (2021-02-22)
