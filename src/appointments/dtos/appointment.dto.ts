@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { APPOINTMENT_STATUS } from 'src/contants';
-import { ServiceDTO } from 'src/services/dtos/service.dto';
 
+import { APPOINTMENT_STATUS } from '../../contants';
 import { ServicePeriodDTO } from '../../services/dtos/service-period.dto';
+import { ServiceDTO } from '../../services/dtos/service.dto';
 
 export class AppointmentDTO {
   @ApiProperty({
