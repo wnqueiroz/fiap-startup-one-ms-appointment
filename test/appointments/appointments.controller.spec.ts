@@ -119,4 +119,18 @@ describe('AppointmentsController', () => {
       ).toStrictEqual(expectedAppointmentDTO);
     });
   });
+
+  describe('cancel', () => {
+    it('should return a cancel service', async () => {
+      jest
+        .spyOn(appointmentsService, 'cancel')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      expect(
+        await appointmentsController.cancel({
+          id: 'idUser',
+        }),
+      ).toStrictEqual(new AppointmentDTO(appointmentEntity));
+    });
+  });
 });
