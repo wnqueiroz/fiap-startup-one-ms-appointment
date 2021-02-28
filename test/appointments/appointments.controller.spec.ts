@@ -93,4 +93,30 @@ describe('AppointmentsController', () => {
       ).toStrictEqual([new AppointmentDTO(appointmentEntity)]);
     });
   });
+
+  describe('create', () => {
+    it('should return a create service', async () => {
+      const appointment: AppointmentEntity = appointmentEntity;
+      const expectedAppointmentDTO = new AppointmentDTO(appointment);
+
+      jest
+        .spyOn(appointmentsService, 'create')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      expect(
+        await appointmentsController.create(
+          {
+            idService: 'idService',
+            idServicePeriod: 'idServicePeriod',
+            date: '2021-02-28',
+          },
+          {
+            id: 'idUser',
+            name: 'userName',
+            email: 'userMail',
+          },
+        ),
+      ).toStrictEqual(expectedAppointmentDTO);
+    });
+  });
 });
