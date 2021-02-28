@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AppointmentStatusEntity } from 'src/appointments/appointment-status.entity';
 import { Repository } from 'typeorm';
 
+import { AppointmentStatusEntity } from '../../src/appointments/appointment-status.entity';
 import { AppointmentEntity } from '../../src/appointments/appointment.entity';
 import { AppointmentsService } from '../../src/appointments/appointments.service';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
@@ -10,7 +10,7 @@ import { ServiceEntity } from '../../src/services/service.entity';
 
 describe('AppointmentsService', () => {
   let appointmentsService: AppointmentsService;
-  let appointmentsRepository: Repository<AppointmentEntity>;
+  let appointmentRepository: Repository<AppointmentEntity>;
   let createAppointment = new AppointmentEntity();
   let createServicePeriods = new ServicePeriodsEntity();
 
@@ -81,7 +81,7 @@ describe('AppointmentsService', () => {
     appointmentsService = moduleRef.get<AppointmentsService>(
       AppointmentsService,
     );
-    appointmentsRepository = moduleRef.get<Repository<AppointmentEntity>>(
+    appointmentRepository = moduleRef.get<Repository<AppointmentEntity>>(
       getRepositoryToken(AppointmentEntity),
     );
   });
@@ -90,8 +90,27 @@ describe('AppointmentsService', () => {
     it('should return all created appointments', async () => {
       const result = [createAppointment];
 
-      jest.spyOn(appointmentsRepository, 'find').mockResolvedValueOnce(result);
+      jest.spyOn(appointmentRepository, 'find').mockResolvedValueOnce(result);
       expect(await appointmentsService.getAll('idAppointment')).toBe(result);
     });
+  });
+
+  describe('getOne', () => {
+    it('should return one service', async () => {
+      jest
+        .spyOn(appointmentRepository, 'findOne')
+        .mockResolvedValueOnce(createAppointment);
+
+      expect(await appointmentsService.getOne('uuid')).toBe(createAppointment);
+    }),
+      it('should thrown an exception when there is no appointment', async () => {
+        jest
+          .spyOn(appointmentRepository, 'findOne')
+          .mockResolvedValueOnce(null);
+
+        await expect(appointmentsService.getOne('uuid')).rejects.toThrow(
+          'Appointment not found',
+        );
+      });
   });
 });
