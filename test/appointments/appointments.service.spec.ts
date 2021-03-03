@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AppointmentStatusEntity } from '../../src/appointments/appointment-status.entity';
 import { AppointmentEntity } from '../../src/appointments/appointment.entity';
 import { AppointmentsService } from '../../src/appointments/appointments.service';
+import { APPOINTMENT_STATUS } from '../../src/contants';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
 
@@ -102,15 +103,34 @@ describe('AppointmentsService', () => {
         .mockResolvedValueOnce(createAppointment);
 
       expect(await appointmentsService.getOne('uuid')).toBe(createAppointment);
-    }),
-      it('should thrown an exception when there is no appointment', async () => {
-        jest
-          .spyOn(appointmentRepository, 'findOne')
-          .mockResolvedValueOnce(null);
+    });
 
-        await expect(appointmentsService.getOne('uuid')).rejects.toThrow(
-          'Appointment not found',
-        );
+    it('should thrown an exception when there is no appointment', async () => {
+      jest.spyOn(appointmentRepository, 'findOne').mockResolvedValueOnce(null);
+
+      await expect(appointmentsService.getOne('uuid')).rejects.toThrow(
+        'Appointment not found',
+      );
+    });
+  });
+
+  describe('cancel', () => {
+    it('should cancel an appointment', async () => {
+      const id = 'uuid';
+      jest
+        .spyOn(appointmentsService, 'getOne')
+        .mockResolvedValueOnce(createAppointment);
+
+      jest
+        .spyOn(appointmentRepository, 'save')
+        .mockResolvedValueOnce(createAppointment);
+
+      expect(await appointmentsService.cancel(id)).toBe(createAppointment);
+      expect(appointmentsService.getOne).toBeCalledWith(id);
+      expect(appointmentRepository.save).toBeCalledWith({
+        ...createAppointment,
+        idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTOMER,
       });
+    });
   });
 });
