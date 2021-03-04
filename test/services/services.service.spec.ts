@@ -6,6 +6,7 @@ import { AppointmentEntity } from '../../src/appointments/appointment.entity';
 import { APPOINTMENT_STATUS } from '../../src/contants';
 import { CreateServiceDTO } from '../../src/services/dtos/create-service.dto';
 import { ServicePeriodDTO } from '../../src/services/dtos/service-period.dto';
+import { UpdateServiceDTO } from '../../src/services/dtos/update-service.dto';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
 import { ServicesService } from '../../src/services/services.service';
@@ -206,6 +207,37 @@ describe('ServicesService', () => {
           },
         ],
         removed: true,
+      });
+    });
+  });
+
+  describe('updateService', () => {
+    it('should throw an exception when the service with the id does not exist', async () => {
+      const payload = new UpdateServiceDTO();
+
+      jest.spyOn(servicesRepository, 'findOne').mockResolvedValueOnce(null);
+
+      await expect(
+        servicesService.updateService(idService, payload),
+      ).rejects.toThrow('Service not found');
+      expect(servicesRepository.findOne).toBeCalledWith(idService);
+    });
+
+    it('should update a service successfully', async () => {
+      const payload = new UpdateServiceDTO();
+
+      jest
+        .spyOn(servicesRepository, 'findOne')
+        .mockResolvedValueOnce(serviceEntity);
+
+      jest.spyOn(servicesRepository, 'save').mockResolvedValueOnce(null);
+
+      const result = await servicesService.updateService(idService, payload);
+
+      expect(result).toBe(undefined);
+      expect(servicesRepository.save).toBeCalledWith({
+        ...serviceEntity,
+        ...payload,
       });
     });
   });
