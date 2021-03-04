@@ -16,6 +16,7 @@ describe('ServicesService', () => {
   let servicePeriodsRepository: Repository<ServicePeriodsEntity>;
 
   const idService = 'uuid';
+  const idServicePeriod = 'uuid';
 
   let serviceEntity = new ServiceEntity();
   let servicePeriodsEntity = new ServicePeriodsEntity();
@@ -181,6 +182,30 @@ describe('ServicesService', () => {
       expect(result).toBe(undefined);
       expect(servicesRepository.save).toBeCalledWith({
         ...serviceEntity,
+      });
+    });
+  });
+
+  describe('deletePeriod', () => {
+    it('should delete period successfully', async () => {
+      jest.spyOn(servicePeriodsRepository, 'findOne').mockResolvedValueOnce({
+        ...servicePeriodsEntity,
+        appointments: [new AppointmentEntity()],
+      });
+      jest.spyOn(servicesRepository, 'save').mockResolvedValueOnce(null);
+
+      const result = await servicesService.deletePeriod(idServicePeriod);
+
+      expect(result).toBe(undefined);
+      expect(servicePeriodsRepository.findOne).toBeCalledWith(idServicePeriod);
+      expect(servicesRepository.save).toBeCalledWith({
+        ...servicePeriodsEntity,
+        appointments: [
+          {
+            idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_SYSTEM,
+          },
+        ],
+        removed: true,
       });
     });
   });
