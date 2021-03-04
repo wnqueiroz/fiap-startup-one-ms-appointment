@@ -57,15 +57,13 @@ export class ServicesController {
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICES_CREATED)
-  async createServices(
+  async createService(
     @Payload()
     message: {
-      value: {
-        service;
-      };
+      value: any;
     },
   ): Promise<void> {
-    const { id, idCompany, name, createdAt, updatedAt } = message.value as any;
+    const { id, idCompany, name, createdAt, updatedAt } = message.value;
 
     await this.servicesService.createService({
       name,
@@ -77,15 +75,13 @@ export class ServicesController {
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICES_UPDATED)
-  async updateServices(
+  async updateService(
     @Payload()
     message: {
-      value: {
-        service;
-      };
+      value: any;
     },
   ): Promise<void> {
-    const { id, name, updatedAt } = message.value as any;
+    const { id, name, updatedAt } = message.value;
 
     await this.servicesService.updateService(id, {
       name,
@@ -94,15 +90,13 @@ export class ServicesController {
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICES_DELETED)
-  async deleteServices(
+  async deleteService(
     @Payload()
     message: {
-      value: {
-        service;
-      };
+      value: any;
     },
   ): Promise<void> {
-    const { id } = message.value as any;
+    const { id } = message.value;
 
     await this.servicesService.deleteService(id);
   }
@@ -111,24 +105,20 @@ export class ServicesController {
   async createPeriod(
     @Payload()
     message: {
-      value: {
-        period;
-      };
+      value: any;
     },
   ): Promise<void> {
-    await this.servicesService.createPeriod(message.value as any);
+    await this.servicesService.createPeriod(message.value);
   }
 
   @MessagePattern(KAFKA_TOPICS.SERVICE_PERIODS_DELETED)
   async deletePeriod(
     @Payload()
     message: {
-      value: {
-        period;
-      };
+      value: any;
     },
   ): Promise<void> {
-    const { id } = message.value as any;
+    const { id } = message.value;
 
     await this.servicesService.deletePeriod(id);
   }
