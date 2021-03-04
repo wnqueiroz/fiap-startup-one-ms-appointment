@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { CreateServiceDTO } from '../../src/services/dtos/create-service.dto';
 import { ServicePeriodDTO } from '../../src/services/dtos/service-period.dto';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
@@ -117,6 +118,23 @@ describe('ServicesService', () => {
       expect(servicePeriodsRepository.save).toBeCalledWith(
         servicePeriodsEntity,
       );
+    });
+  });
+
+  describe('createService', () => {
+    it('should create a service successfully', async () => {
+      const createServiceDto = new CreateServiceDTO();
+
+      jest
+        .spyOn(servicesRepository, 'create')
+        .mockReturnValueOnce(serviceEntity);
+      jest.spyOn(servicesRepository, 'save').mockResolvedValueOnce(null);
+
+      const result = await servicesService.createService(createServiceDto);
+
+      expect(result).toBe(undefined);
+      expect(servicesRepository.create).toBeCalledWith(createServiceDto);
+      expect(servicesRepository.save).toBeCalledWith(serviceEntity);
     });
   });
 });
