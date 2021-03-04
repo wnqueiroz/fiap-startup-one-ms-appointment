@@ -6,6 +6,7 @@ import { AppointmentStatusEntity } from '../../src/appointments/appointment-stat
 import { AppointmentEntity } from '../../src/appointments/appointment.entity';
 import { AppointmentsService } from '../../src/appointments/appointments.service';
 import { CreateAppointmentDTO } from '../../src/appointments/dtos/create-appointment.dto';
+import { UpdateAppointmentDTO } from '../../src/appointments/dtos/update-appointment.dto';
 import { APPOINTMENT_STATUS } from '../../src/contants';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
@@ -207,6 +208,36 @@ describe('AppointmentsService', () => {
         idAppointmentStatus: APPOINTMENT_STATUS.PENDING,
       });
       expect(appointmentRepository.save).toBeCalledWith(appointmentEntity);
+    });
+  });
+
+  describe('updateOne', () => {
+    it('should update an appointment', async () => {
+      const idUser = 'uuid';
+      const updateAppointmentDTO = new UpdateAppointmentDTO({
+        idUser,
+        createdAt: new Date(),
+      });
+
+      jest
+        .spyOn(appointmentsService, 'getOne')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      jest
+        .spyOn(appointmentRepository, 'save')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      const result = await appointmentsService.updateOne(
+        idUser,
+        updateAppointmentDTO,
+      );
+
+      expect(result).toBe(appointmentEntity);
+      expect(appointmentsService.getOne).toBeCalledWith(idUser);
+      expect(appointmentRepository.save).toBeCalledWith({
+        ...appointmentEntity,
+        ...updateAppointmentDTO,
+      });
     });
   });
 });
