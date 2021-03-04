@@ -114,4 +114,26 @@ describe('ServicesController', () => {
       });
     });
   });
+
+  describe('deleteService', () => {
+    it(`should delete a service from "${KAFKA_TOPICS.SERVICES_DELETED}" kafka topic`, async () => {
+      const service = {
+        id: 'uuid',
+        idCompany: 'uuid',
+        name: 'foo',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      const payload = {
+        value: service,
+      };
+
+      jest.spyOn(servicesService, 'deleteService').mockResolvedValueOnce(null);
+
+      const result = await servicesController.deleteService(payload);
+
+      expect(result).toBe(undefined);
+      expect(servicesService.deleteService).toBeCalledWith(service.id);
+    });
+  });
 });
