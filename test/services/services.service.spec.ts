@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ServicePeriodDTO } from '../../src/services/dtos/service-period.dto';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
 import { ServicesService } from '../../src/services/services.service';
@@ -12,6 +13,9 @@ describe('ServicesService', () => {
   let servicePeriodsRepository: Repository<ServicePeriodsEntity>;
 
   const idService = 'uuid';
+
+  let serviceEntity = new ServiceEntity();
+  let servicePeriodsEntity = new ServicePeriodsEntity();
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -35,6 +39,9 @@ describe('ServicesService', () => {
     servicePeriodsRepository = moduleRef.get<Repository<ServicePeriodsEntity>>(
       getRepositoryToken(ServicePeriodsEntity),
     );
+
+    serviceEntity = new ServiceEntity();
+    servicePeriodsEntity = new ServicePeriodsEntity();
   });
 
   describe('getAvailablePeriods', () => {
@@ -48,8 +55,6 @@ describe('ServicesService', () => {
     });
 
     it('should return all available service periods for a service', async () => {
-      const serviceEntity = new ServiceEntity();
-      const servicePeriodsEntity = new ServicePeriodsEntity();
       jest
         .spyOn(servicesRepository, 'findOne')
         .mockResolvedValueOnce(serviceEntity);
@@ -68,6 +73,50 @@ describe('ServicesService', () => {
         },
       });
       expect(servicesRepository.findOne).toBeCalledWith(idService);
+    });
+  });
+
+  describe('createPeriod', () => {
+    it('should throw an exception when the service with the id does not exist', async () => {
+      const servicePeriodDto = new ServicePeriodDTO({
+        idService,
+      });
+      jest.spyOn(servicesRepository, 'findOne').mockResolvedValueOnce(null);
+
+      await expect(
+        servicesService.createPeriod(servicePeriodDto),
+      ).rejects.toThrow('Service not found');
+      expect(servicesRepository.findOne).toBeCalledWith(
+        servicePeriodDto.idService,
+      );
+    });
+
+    it('should create a service period successfully', async () => {
+      const servicePeriodDto = new ServicePeriodDTO({
+        idService,
+      });
+      jest
+        .spyOn(servicesRepository, 'findOne')
+        .mockResolvedValueOnce(serviceEntity);
+      jest
+        .spyOn(servicePeriodsRepository, 'create')
+        .mockReturnValueOnce(servicePeriodsEntity);
+      jest
+        .spyOn(servicePeriodsRepository, 'save')
+        .mockResolvedValueOnce(servicePeriodsEntity);
+
+      const result = await servicesService.createPeriod(servicePeriodDto);
+
+      expect(result).toBe(undefined);
+      expect(servicesRepository.findOne).toBeCalledWith(
+        servicePeriodDto.idService,
+      );
+      expect(servicePeriodsRepository.create).toBeCalledWith({
+        ...servicePeriodDto,
+      });
+      expect(servicePeriodsRepository.save).toBeCalledWith(
+        servicePeriodsEntity,
+      );
     });
   });
 });
