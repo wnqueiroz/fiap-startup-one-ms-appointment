@@ -2,6 +2,8 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { AppointmentEntity } from '../../src/appointments/appointment.entity';
+import { APPOINTMENT_STATUS } from '../../src/contants';
 import { CreateServiceDTO } from '../../src/services/dtos/create-service.dto';
 import { ServicePeriodDTO } from '../../src/services/dtos/service-period.dto';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
@@ -135,6 +137,51 @@ describe('ServicesService', () => {
       expect(result).toBe(undefined);
       expect(servicesRepository.create).toBeCalledWith(createServiceDto);
       expect(servicesRepository.save).toBeCalledWith(serviceEntity);
+    });
+  });
+
+  describe('deleteService', () => {
+    it(`should delete a service and its children's (service periods and appointments related)`, async () => {
+      serviceEntity.servicePeriods = [servicePeriodsEntity];
+      serviceEntity.appointments = [new AppointmentEntity()];
+
+      jest
+        .spyOn(servicesRepository, 'findOne')
+        .mockResolvedValueOnce(serviceEntity);
+      jest.spyOn(servicesRepository, 'save').mockResolvedValueOnce(null);
+
+      const result = await servicesService.deleteService(idService);
+
+      expect(result).toBe(undefined);
+      expect(servicesRepository.save).toBeCalledWith({
+        ...serviceEntity,
+        servicePeriods: [
+          {
+            removed: true,
+          },
+        ],
+        appointments: [
+          { idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_SYSTEM },
+        ],
+        removed: true,
+      });
+    });
+
+    it('should only delete the service (when there are no service periods and appointments)', async () => {
+      serviceEntity.servicePeriods = null;
+      serviceEntity.appointments = null;
+
+      jest
+        .spyOn(servicesRepository, 'findOne')
+        .mockResolvedValueOnce(serviceEntity);
+      jest.spyOn(servicesRepository, 'save').mockResolvedValueOnce(null);
+
+      const result = await servicesService.deleteService(idService);
+
+      expect(result).toBe(undefined);
+      expect(servicesRepository.save).toBeCalledWith({
+        ...serviceEntity,
+      });
     });
   });
 });
