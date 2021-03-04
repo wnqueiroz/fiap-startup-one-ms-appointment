@@ -84,8 +84,34 @@ describe('ServicesController', () => {
       jest.spyOn(servicesService, 'createService').mockResolvedValueOnce(null);
 
       const result = await servicesController.createService(payload);
+
       expect(result).toBe(undefined);
       expect(servicesService.createService).toBeCalledWith(service);
+    });
+  });
+
+  describe('updateService', () => {
+    it(`should update a service from "${KAFKA_TOPICS.SERVICES_UPDATED}" kafka topic`, async () => {
+      const service = {
+        id: 'uuid',
+        idCompany: 'uuid',
+        name: 'foo',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      const payload = {
+        value: service,
+      };
+
+      jest.spyOn(servicesService, 'updateService').mockResolvedValueOnce(null);
+
+      const result = await servicesController.updateService(payload);
+
+      expect(result).toBe(undefined);
+      expect(servicesService.updateService).toBeCalledWith(service.id, {
+        name: service.name,
+        updatedAt: service.updatedAt,
+      });
     });
   });
 });
