@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { KAFKA_CLIENTS } from '../../src/contants';
+import { KAFKA_CLIENTS, KAFKA_TOPICS } from '../../src/contants';
 import { ServicePeriodDTO } from '../../src/services/dtos/service-period.dto';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
@@ -65,6 +65,27 @@ describe('ServicesController', () => {
         ),
       );
       expect(servicesService.getAvailablePeriods).toBeCalledWith(params.id);
+    });
+  });
+
+  describe('createService', () => {
+    it(`should create a service from "${KAFKA_TOPICS.SERVICES_CREATED}" kafka topic`, async () => {
+      const service = {
+        id: 'uuid',
+        idCompany: 'uuid',
+        name: 'foo',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      const payload = {
+        value: service,
+      };
+
+      jest.spyOn(servicesService, 'createService').mockResolvedValueOnce(null);
+
+      const result = await servicesController.createService(payload);
+      expect(result).toBe(undefined);
+      expect(servicesService.createService).toBeCalledWith(service);
     });
   });
 });
