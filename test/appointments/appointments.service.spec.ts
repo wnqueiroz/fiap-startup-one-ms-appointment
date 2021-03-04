@@ -5,32 +5,37 @@ import { Repository } from 'typeorm';
 import { AppointmentStatusEntity } from '../../src/appointments/appointment-status.entity';
 import { AppointmentEntity } from '../../src/appointments/appointment.entity';
 import { AppointmentsService } from '../../src/appointments/appointments.service';
+import { CreateAppointmentDTO } from '../../src/appointments/dtos/create-appointment.dto';
 import { APPOINTMENT_STATUS } from '../../src/contants';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
 
 describe('AppointmentsService', () => {
   let appointmentsService: AppointmentsService;
+
   let appointmentRepository: Repository<AppointmentEntity>;
-  let createAppointment = new AppointmentEntity();
-  let createServicePeriods = new ServicePeriodsEntity();
+  let serviceRepository: Repository<ServiceEntity>;
+  let servicePeriodsRepository: Repository<ServicePeriodsEntity>;
+
+  let appointmentEntity: AppointmentEntity = new AppointmentEntity();
+  let servicePeriodsEntity = new ServicePeriodsEntity();
 
   const createService: ServiceEntity = {
     id: 'uuid',
     name: 'serviceName',
     idCompany: 'uuid',
     removed: false,
-    appointments: [createAppointment],
-    servicePeriods: [createServicePeriods],
+    appointments: [appointmentEntity],
+    servicePeriods: [servicePeriodsEntity],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
 
-  createServicePeriods = {
+  servicePeriodsEntity = {
     id: 'uuid',
     idService: 'uuid',
     service: createService,
-    appointments: [createAppointment],
+    appointments: [appointmentEntity],
     startTime: 'time',
     endTime: 'time',
     removed: false,
@@ -38,15 +43,15 @@ describe('AppointmentsService', () => {
     updatedAt: new Date(),
   };
 
-  const createAppointmentStatus: AppointmentStatusEntity = {
+  const appointmentStatusEntity: AppointmentStatusEntity = {
     id: 'uuid',
     name: 'uuid',
-    appointments: [createAppointment],
+    appointments: [appointmentEntity],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
 
-  createAppointment = {
+  appointmentEntity = {
     id: 'uuid',
     idUser: 'uuid',
     idService: 'uuid',
@@ -54,8 +59,8 @@ describe('AppointmentsService', () => {
     idAppointmentStatus: 'uuid',
     date: new Date(),
     service: createService,
-    servicePeriod: createServicePeriods,
-    appointmentStatus: createAppointmentStatus,
+    servicePeriod: servicePeriodsEntity,
+    appointmentStatus: appointmentStatusEntity,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -85,11 +90,17 @@ describe('AppointmentsService', () => {
     appointmentRepository = moduleRef.get<Repository<AppointmentEntity>>(
       getRepositoryToken(AppointmentEntity),
     );
+    serviceRepository = moduleRef.get<Repository<ServiceEntity>>(
+      getRepositoryToken(ServiceEntity),
+    );
+    servicePeriodsRepository = moduleRef.get<Repository<ServicePeriodsEntity>>(
+      getRepositoryToken(ServicePeriodsEntity),
+    );
   });
 
   describe('getAll', () => {
     it('should return all created appointments', async () => {
-      const result = [createAppointment];
+      const result = [appointmentEntity];
 
       jest.spyOn(appointmentRepository, 'find').mockResolvedValueOnce(result);
       expect(await appointmentsService.getAll('idAppointment')).toBe(result);
@@ -100,9 +111,9 @@ describe('AppointmentsService', () => {
     it('should return one service', async () => {
       jest
         .spyOn(appointmentRepository, 'findOne')
-        .mockResolvedValueOnce(createAppointment);
+        .mockResolvedValueOnce(appointmentEntity);
 
-      expect(await appointmentsService.getOne('uuid')).toBe(createAppointment);
+      expect(await appointmentsService.getOne('uuid')).toBe(appointmentEntity);
     });
 
     it('should thrown an exception when there is no appointment', async () => {
@@ -119,18 +130,83 @@ describe('AppointmentsService', () => {
       const id = 'uuid';
       jest
         .spyOn(appointmentsService, 'getOne')
-        .mockResolvedValueOnce(createAppointment);
+        .mockResolvedValueOnce(appointmentEntity);
 
       jest
         .spyOn(appointmentRepository, 'save')
-        .mockResolvedValueOnce(createAppointment);
+        .mockResolvedValueOnce(appointmentEntity);
 
-      expect(await appointmentsService.cancel(id)).toBe(createAppointment);
+      expect(await appointmentsService.cancel(id)).toBe(appointmentEntity);
       expect(appointmentsService.getOne).toBeCalledWith(id);
       expect(appointmentRepository.save).toBeCalledWith({
-        ...createAppointment,
+        ...appointmentEntity,
         idAppointmentStatus: APPOINTMENT_STATUS.CANCEL_CUSTOMER,
       });
+    });
+  });
+
+  describe('create', () => {
+    const idUser = 'uuid';
+    const idService = 'foo';
+    const idServicePeriod = 'bar';
+
+    const createAppointmentDto = new CreateAppointmentDTO({
+      idService,
+      idServicePeriod,
+    });
+
+    it(`should throw an exception when the service passed it's NOT exists`, async () => {
+      jest.spyOn(serviceRepository, 'findOne').mockResolvedValueOnce(null);
+
+      await expect(
+        appointmentsService.create(idUser, createAppointmentDto),
+      ).rejects.toThrow('Service not found');
+      expect(serviceRepository.findOne).toBeCalledWith(idService);
+    });
+
+    it(`should throw an exception when the service period passed it's NOT exists`, async () => {
+      jest
+        .spyOn(serviceRepository, 'findOne')
+        .mockResolvedValueOnce(createService);
+      jest
+        .spyOn(servicePeriodsRepository, 'findOne')
+        .mockResolvedValueOnce(null);
+
+      await expect(
+        appointmentsService.create(idUser, createAppointmentDto),
+      ).rejects.toThrow('Service period not found');
+      expect(serviceRepository.findOne).toBeCalledWith(idService);
+      expect(servicePeriodsRepository.findOne).toBeCalledWith(idServicePeriod);
+    });
+
+    it('should create an appointment', async () => {
+      jest
+        .spyOn(serviceRepository, 'findOne')
+        .mockResolvedValueOnce(createService);
+      jest
+        .spyOn(servicePeriodsRepository, 'findOne')
+        .mockResolvedValueOnce(servicePeriodsEntity);
+      jest
+        .spyOn(appointmentRepository, 'create')
+        .mockReturnValueOnce(appointmentEntity);
+      jest
+        .spyOn(appointmentRepository, 'save')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      const result = await appointmentsService.create(
+        idUser,
+        createAppointmentDto,
+      );
+
+      expect(result).toBe(appointmentEntity);
+      expect(serviceRepository.findOne).toBeCalledWith(idService);
+      expect(servicePeriodsRepository.findOne).toBeCalledWith(idServicePeriod);
+      expect(appointmentRepository.create).toBeCalledWith({
+        ...createAppointmentDto,
+        idUser,
+        idAppointmentStatus: APPOINTMENT_STATUS.PENDING,
+      });
+      expect(appointmentRepository.save).toBeCalledWith(appointmentEntity);
     });
   });
 });
