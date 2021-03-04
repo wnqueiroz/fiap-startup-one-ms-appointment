@@ -136,4 +136,22 @@ describe('ServicesController', () => {
       expect(servicesService.deleteService).toBeCalledWith(service.id);
     });
   });
+
+  describe('createPeriod', () => {
+    it(`should create a service period from "${KAFKA_TOPICS.SERVICE_PERIODS_CREATED}" kafka topic`, async () => {
+      const servicePeriod = {
+        id: 'uuid',
+      };
+      const payload = {
+        value: servicePeriod,
+      };
+
+      jest.spyOn(servicesService, 'createPeriod').mockResolvedValueOnce(null);
+
+      const result = await servicesController.createPeriod(payload);
+
+      expect(result).toBe(undefined);
+      expect(servicesService.createPeriod).toBeCalledWith(servicePeriod);
+    });
+  });
 });
