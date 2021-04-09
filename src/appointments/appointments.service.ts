@@ -51,6 +51,17 @@ export class AppointmentsService {
     });
   }
 
+  async finish(id: string): Promise<AppointmentEntity> {
+    const appointmentEntity = await this.getOne(id);
+
+    // TODO: cancel only appointment that not canceled by customer or system
+
+    return this.appointmentRepository.save({
+      ...appointmentEntity,
+      idAppointmentStatus: APPOINTMENT_STATUS.FINISHED,
+    });
+  }
+
   // TODO: check payload returned from this
   async create(
     idUser: string,

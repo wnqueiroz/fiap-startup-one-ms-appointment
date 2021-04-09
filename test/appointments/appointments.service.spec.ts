@@ -146,6 +146,26 @@ describe('AppointmentsService', () => {
     });
   });
 
+  describe('finish', () => {
+    it('should finish an appointment', async () => {
+      const id = 'uuid';
+      jest
+        .spyOn(appointmentsService, 'getOne')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      jest
+        .spyOn(appointmentRepository, 'save')
+        .mockResolvedValueOnce(appointmentEntity);
+
+      expect(await appointmentsService.finish(id)).toBe(appointmentEntity);
+      expect(appointmentsService.getOne).toBeCalledWith(id);
+      expect(appointmentRepository.save).toBeCalledWith({
+        ...appointmentEntity,
+        idAppointmentStatus: APPOINTMENT_STATUS.FINISHED,
+      });
+    });
+  });
+
   describe('create', () => {
     const idUser = 'uuid';
     const idService = 'foo';
