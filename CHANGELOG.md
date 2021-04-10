@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.2.0...1.3.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* adding query in appointment service ([ab7fcf8](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/ab7fcf8496f6a8d65591ca468aa0ad009f39a1c5))
+
+## [1.2.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.1.0...1.2.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* added GET /v1/services?name=foo ([e319509](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/e3195095a368e198039cc8a6780fd05629e86e5b))
+
+## [1.1.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.0.2...1.1.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* added GET /v1/services/:id ([aa3e8ad](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/aa3e8ad4dca4b89ea223395a39417989bfb3ebfc))
+
 ### [1.0.2](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.0.1...1.0.2) (2021-03-04)
 
 ### [1.0.1](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.0.0...1.0.1) (2021-02-23)

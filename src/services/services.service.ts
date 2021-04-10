@@ -18,6 +18,27 @@ export class ServicesService {
     private servicePeriodsRepository: Repository<ServicePeriodsEntity>,
   ) {}
 
+  async getServiceByName(name: string): Promise<ServiceEntity[]> {
+    const serviceEntities = await this.servicesRepository
+      .createQueryBuilder('services')
+      .innerJoinAndSelect('services.servicePeriods', 'servicePeriods')
+      .where('LOWER(name) LIKE :name', { name: `%${name.toLowerCase()}%` })
+      .getMany();
+    return serviceEntities;
+  }
+
+  async getOne(id: string): Promise<ServiceEntity> {
+    const serviceEntity = await this.servicesRepository.findOne(id, {
+      relations: ['servicePeriods'],
+    });
+
+    if (!serviceEntity) {
+      throw new NotFoundException('Service not found');
+    }
+
+    return serviceEntity;
+  }
+
   async getAvailablePeriods(
     idService: string,
   ): Promise<ServicePeriodsEntity[]> {

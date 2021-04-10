@@ -148,4 +148,22 @@ export class AppointmentsController {
 
     return new AppointmentDTO(appointmentEntity);
   }
+
+  @Get('/next')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ summary: 'Get Next Appointment' })
+  @ApiOkResponse({
+    description: 'The record has been successfully returned.',
+    type: AppointmentDTO,
+    isArray: false,
+  })
+  async getNextAppointment(
+    @GetCurrentUser() user: CurrentUserDTO,
+  ): Promise<AppointmentDTO> {
+    const { id } = user;
+
+    const appointmentEntity = await this.appointmentsService.getNext(id);
+
+    return new AppointmentDTO(appointmentEntity);
+  }
 }
