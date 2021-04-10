@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.4.0...1.5.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* received new properties from kafka to service entity ([6bca914](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/6bca914efa161e6d446fca5f8e54d1e2644fbb5e))
+
+
+### Correções de erros
+
+* corrected file test ([47b223a](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/47b223a1151c41d55c60804d7cc7bd95893ac1da))
+* corrected file test ([913619d](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/913619df4063d8b99da3c146de5eab0e13aac287))
+
 ## [1.4.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.3.0...1.4.0) (2021-04-10)
 
 
