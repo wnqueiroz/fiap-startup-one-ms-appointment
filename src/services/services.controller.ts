@@ -94,12 +94,22 @@ export class ServicesController {
       value: any;
     },
   ): Promise<void> {
-    const { id, idCompany, name, createdAt, updatedAt } = message.value;
+    const {
+      id,
+      idCompany,
+      name,
+      createdAt,
+      updatedAt,
+      companyName,
+      companyAddress,
+    } = message.value;
 
     await this.servicesService.createService({
       name,
       idCompany,
       id,
+      companyName,
+      companyAddress,
       createdAt,
       updatedAt,
     });
