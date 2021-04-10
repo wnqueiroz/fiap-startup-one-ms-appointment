@@ -91,4 +91,19 @@ export class AppointmentsService {
       ...updateAppointmentDTO,
     });
   }
+
+  async getNext(id: string): Promise<AppointmentEntity> {
+    const nextAppointmentEntity = this.appointmentRepository
+      .createQueryBuilder('ap')
+      .innerJoin('service_periods', 'sp', 'ap.idServicePeriod = sp.id')
+      .where('ap.idUser = :id', { id: id })
+      .andWhere('ap.idAppointmentStatus = :status', {
+        status: APPOINTMENT_STATUS.PENDING,
+      })
+      .andWhere('ap.date >= now()')
+      .orderBy('ap.date', 'ASC')
+      .addOrderBy('sp.startTime', 'ASC')
+      .getOne();
+    return nextAppointmentEntity;
+  }
 }
