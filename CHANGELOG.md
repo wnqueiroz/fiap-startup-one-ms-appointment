@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.3.0...1.4.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* added new endpoint POST /v1/appointments/:id/finish ([bba0d30](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/bba0d30272b59bc889329e59711a93596466c2d8))
+* added new endpoints ([5532d51](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/5532d519de6c0fcb44d5dc28b8fb927ed57d15d6))
+
 ## [1.3.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.2.0...1.3.0) (2021-04-10)
 
 
