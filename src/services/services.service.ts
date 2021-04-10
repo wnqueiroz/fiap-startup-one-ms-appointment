@@ -18,6 +18,18 @@ export class ServicesService {
     private servicePeriodsRepository: Repository<ServicePeriodsEntity>,
   ) {}
 
+  async getOne(id: string): Promise<ServiceEntity> {
+    const serviceEntity = await this.servicesRepository.findOne(id, {
+      relations: ['servicePeriods'],
+    });
+
+    if (!serviceEntity) {
+      throw new NotFoundException('Service not found');
+    }
+
+    return serviceEntity;
+  }
+
   async getAvailablePeriods(
     idService: string,
   ): Promise<ServicePeriodsEntity[]> {
