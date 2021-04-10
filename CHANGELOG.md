@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.2.0...1.3.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* adding query in appointment service ([ab7fcf8](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/ab7fcf8496f6a8d65591ca468aa0ad009f39a1c5))
+
 ## [1.2.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.1.0...1.2.0) (2021-04-10)
 
 
