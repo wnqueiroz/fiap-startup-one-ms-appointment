@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -28,6 +29,20 @@ import { ServicesService } from './services.service';
 @Controller()
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
+
+  @Get('/')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ summary: 'Get sevice by name' })
+  @ApiOkResponse({
+    description: 'The record has been successfully returned.',
+    type: ServiceDTO,
+    isArray: true,
+  })
+  async getService(@Query('name') name): Promise<ServiceDTO[]> {
+    const serviceEntities = await this.servicesService.getServiceByName(name);
+
+    return serviceEntities.map(serviceEntity => new ServiceDTO(serviceEntity));
+  }
 
   @Get('/:id')
   @UseInterceptors(ClassSerializerInterceptor)
