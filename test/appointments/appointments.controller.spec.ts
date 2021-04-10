@@ -7,6 +7,7 @@ import { AppointmentEntity } from '../../src/appointments/appointment.entity';
 import { AppointmentsController } from '../../src/appointments/appointments.controller';
 import { AppointmentsService } from '../../src/appointments/appointments.service';
 import { AppointmentDTO } from '../../src/appointments/dtos/appointment.dto';
+import { KAFKA_CLIENTS } from '../../src/contants';
 import { ServicePeriodsEntity } from '../../src/services/service-periods.entity';
 import { ServiceEntity } from '../../src/services/service.entity';
 
@@ -50,7 +51,16 @@ describe('AppointmentsController', () => {
     updatedAt: new Date(),
   };
 
+  const mockToPromiseClientKafka = jest.fn(async () => null);
+  const mockToEmitClientKafka = jest.fn(() => ({
+    toPromise: mockToPromiseClientKafka,
+  }));
+
   beforeEach(async () => {
+    const MockClientKafka = {
+      emit: mockToEmitClientKafka,
+    };
+
     const moduleRef = await Test.createTestingModule({
       controllers: [AppointmentsController],
       providers: [
@@ -66,6 +76,10 @@ describe('AppointmentsController', () => {
         {
           provide: getRepositoryToken(ServicePeriodsEntity),
           useClass: Repository,
+        },
+        {
+          provide: KAFKA_CLIENTS.SERVICES_SERVICE,
+          useFactory: () => MockClientKafka,
         },
       ],
     }).compile();

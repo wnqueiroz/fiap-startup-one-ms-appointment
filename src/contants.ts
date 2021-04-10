@@ -6,6 +6,8 @@ export enum APPOINTMENT_STATUS {
 }
 
 export enum KAFKA_TOPICS {
+  APPOINTMENTS_FINISHED = 'appointments.finished',
+  APPOINTMENTS_CANCELED = 'appointments.canceled',
   SERVICES_CREATED = 'services.created',
   SERVICES_UPDATED = 'services.updated',
   SERVICES_DELETED = 'services.deleted',
