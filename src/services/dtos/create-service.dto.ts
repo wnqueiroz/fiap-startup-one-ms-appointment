@@ -5,6 +5,10 @@ export class CreateServiceDTO {
 
   idCompany: string;
 
+  companyName: string;
+
+  companyAddress: string;
+
   createdAt: Date;
 
   updatedAt: Date;

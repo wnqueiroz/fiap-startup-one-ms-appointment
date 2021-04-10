@@ -31,6 +31,16 @@ export class ServiceEntity {
   })
   removed: boolean;
 
+  @Column({
+    nullable: false,
+  })
+  companyName: string;
+
+  @Column({
+    nullable: false,
+  })
+  companyAddress: string;
+
   @OneToMany(
     () => AppointmentEntity,
     appointment => appointment.service,

@@ -26,6 +26,8 @@ describe('AppointmentsService', () => {
     name: 'serviceName',
     idCompany: 'uuid',
     removed: false,
+    companyName: 'foo',
+    companyAddress: 'foo',
     appointments: [appointmentEntity],
     servicePeriods: [servicePeriodsEntity],
     createdAt: new Date(),
