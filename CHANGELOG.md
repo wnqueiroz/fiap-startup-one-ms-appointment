@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.5.0...1.6.0) (2021-04-10)
+
+
+### Funcionalidades
+
+* added price field ([92d853d](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/92d853dc9552a3e4c9bb40198c30060e31f450c2))
+
 ## [1.5.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.4.0...1.5.0) (2021-04-10)
 
 
