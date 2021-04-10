@@ -43,6 +43,7 @@ describe('AppointmentsController', () => {
   serviceEntity = {
     id: 'appointmentId',
     name: 'Service Name',
+    price: 60,
     idCompany: 'idCompany',
     removed: false,
     companyAddress: 'Company Address',
