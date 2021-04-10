@@ -74,6 +74,8 @@ describe('ServicesController', () => {
         id: 'uuid',
         idCompany: 'uuid',
         name: 'foo',
+        companyName: 'foo',
+        companyAddress: 'foo',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -96,6 +98,8 @@ describe('ServicesController', () => {
         id: 'uuid',
         idCompany: 'uuid',
         name: 'foo',
+        companyName: 'foo',
+        companyAddress: 'foo',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -121,6 +125,8 @@ describe('ServicesController', () => {
         id: 'uuid',
         idCompany: 'uuid',
         name: 'foo',
+        companyName: 'foo',
+        companyAddress: 'foo',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -161,6 +167,8 @@ describe('ServicesController', () => {
         id: 'uuid',
         idCompany: 'uuid',
         name: 'foo',
+        companyName: 'foo',
+        companyAddress: 'foo',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
