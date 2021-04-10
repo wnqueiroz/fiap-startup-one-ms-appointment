@@ -45,6 +45,8 @@ describe('AppointmentsController', () => {
     name: 'Service Name',
     idCompany: 'idCompany',
     removed: false,
+    companyAddress: 'Company Address',
+    companyName: 'Company Name',
     appointments: [appointmentEntity],
     servicePeriods: null,
     createdAt: new Date(),
