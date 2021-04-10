@@ -118,6 +118,10 @@ export class AppointmentsController {
 
     const appointmentEntity = await this.appointmentsService.cancel(id);
 
+    await this.client
+      .emit(KAFKA_TOPICS.APPOINTMENTS_CANCELED, { ...appointmentEntity })
+      .toPromise();
+
     return new AppointmentDTO(appointmentEntity);
   }
 
@@ -157,7 +161,7 @@ export class AppointmentsController {
     const appointmentEntity = await this.appointmentsService.finish(id);
 
     await this.client
-      .emit(KAFKA_TOPICS.APPOINTMENTS_UPDATE, { ...appointmentEntity })
+      .emit(KAFKA_TOPICS.APPOINTMENTS_FINISHED, { ...appointmentEntity })
       .toPromise();
 
     return new AppointmentDTO(appointmentEntity);
