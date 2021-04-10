@@ -24,6 +24,7 @@ describe('AppointmentsService', () => {
   const createService: ServiceEntity = {
     id: 'uuid',
     name: 'serviceName',
+    price: 60,
     idCompany: 'uuid',
     removed: false,
     companyName: 'foo',

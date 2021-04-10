@@ -20,6 +20,9 @@ export class ServiceEntity {
   @Column({ nullable: false })
   name: string;
 
+  @Column({ nullable: false })
+  price: number;
+
   @Column('uuid', {
     nullable: false,
   })
