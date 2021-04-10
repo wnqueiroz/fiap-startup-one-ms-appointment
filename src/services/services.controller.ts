@@ -19,6 +19,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { KAFKA_TOPICS } from '../contants';
 import { RefOneParams } from '../utils/validation';
 import { ServicePeriodDTO } from './dtos/service-period.dto';
+import { ServiceDTO } from './dtos/service.dto';
 import { ServicesService } from './services.service';
 
 @ApiTags('services')
@@ -27,6 +28,21 @@ import { ServicesService } from './services.service';
 @Controller()
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
+
+  @Get('/:id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ summary: 'Get one appointment' })
+  @ApiOkResponse({
+    description: 'The record has been successfully returned.',
+    type: ServiceDTO,
+  })
+  async getOne(@Param() params: RefOneParams): Promise<ServiceDTO> {
+    const { id } = params;
+
+    const serviceEntity = await this.servicesService.getOne(id);
+
+    return new ServiceDTO(serviceEntity);
+  }
 
   @Get('/:id/available-periods')
   @UseInterceptors(ClassSerializerInterceptor)
