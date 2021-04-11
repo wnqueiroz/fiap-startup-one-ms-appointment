@@ -5,6 +5,8 @@ export class CreateServiceDTO {
 
   idCompany: string;
 
+  price: number;
+
   companyName: string;
 
   companyAddress: string;

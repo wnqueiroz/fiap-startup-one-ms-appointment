@@ -97,6 +97,7 @@ export class ServicesController {
     const {
       id,
       idCompany,
+      price,
       name,
       createdAt,
       updatedAt,
@@ -108,6 +109,7 @@ export class ServicesController {
       name,
       idCompany,
       id,
+      price,
       companyName,
       companyAddress,
       createdAt,

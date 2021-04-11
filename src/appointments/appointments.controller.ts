@@ -59,27 +59,6 @@ export class AppointmentsController {
     );
   }
 
-  @Get('/:id')
-  @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ summary: 'Get an appointment' })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    example: '00000000-0000-0000-0000-000000000000',
-  })
-  @ApiOkResponse({
-    description: 'The record has been successfully returned.',
-    type: AppointmentDTO,
-    isArray: true,
-  })
-  async get(@Param() params: RefOneParams): Promise<AppointmentDTO> {
-    const { id } = params;
-
-    const appointmentEntity = await this.appointmentsService.getOne(id);
-
-    return new AppointmentDTO(appointmentEntity);
-  }
-
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Create an appointment' })
@@ -97,6 +76,46 @@ export class AppointmentsController {
       id,
       createAppointmentDTO,
     );
+
+    return new AppointmentDTO(appointmentEntity);
+  }
+
+  @Get('/next')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ summary: 'Get Next Appointment' })
+  @ApiOkResponse({
+    description: 'The record has been successfully returned.',
+    type: AppointmentDTO,
+    isArray: false,
+  })
+  async getNextAppointment(
+    @GetCurrentUser() user: CurrentUserDTO,
+  ): Promise<AppointmentDTO> {
+    const { id } = user;
+    console.log(id);
+
+    const appointmentEntity = await this.appointmentsService.getNext(id);
+
+    return new AppointmentDTO(appointmentEntity);
+  }
+
+  @Get('/:id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ summary: 'Get an appointment' })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    example: '00000000-0000-0000-0000-000000000000',
+  })
+  @ApiOkResponse({
+    description: 'The record has been successfully returned.',
+    type: AppointmentDTO,
+    isArray: true,
+  })
+  async get(@Param() params: RefOneParams): Promise<AppointmentDTO> {
+    const { id } = params;
+
+    const appointmentEntity = await this.appointmentsService.getOne(id);
 
     return new AppointmentDTO(appointmentEntity);
   }
@@ -121,24 +140,6 @@ export class AppointmentsController {
     await this.client
       .emit(KAFKA_TOPICS.APPOINTMENTS_CANCELED, { ...appointmentEntity })
       .toPromise();
-
-    return new AppointmentDTO(appointmentEntity);
-  }
-
-  @Get('/next')
-  @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ summary: 'Get Next Appointment' })
-  @ApiOkResponse({
-    description: 'The record has been successfully returned.',
-    type: AppointmentDTO,
-    isArray: false,
-  })
-  async getNextAppointment(
-    @GetCurrentUser() user: CurrentUserDTO,
-  ): Promise<AppointmentDTO> {
-    const { id } = user;
-
-    const appointmentEntity = await this.appointmentsService.getNext(id);
 
     return new AppointmentDTO(appointmentEntity);
   }
