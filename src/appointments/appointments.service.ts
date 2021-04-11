@@ -105,16 +105,18 @@ export class AppointmentsService {
 
   async getNext(id: string): Promise<AppointmentEntity> {
     const nextAppointmentEntity = this.appointmentRepository
-      .createQueryBuilder('ap')
-      .innerJoin('service_periods', 'sp', 'ap.idServicePeriod = sp.id')
-      .where('ap.idUser = :id', { id: id })
-      .andWhere('ap.idAppointmentStatus = :status', {
+      .createQueryBuilder('appointments')
+      .innerJoinAndSelect('appointments.service', 'service')
+      .innerJoinAndSelect('appointments.servicePeriod', 'servicePeriod')
+      .where('appointments.idUser = :id', { id })
+      .andWhere('appointments.idAppointmentStatus = :status', {
         status: APPOINTMENT_STATUS.PENDING,
       })
-      .andWhere('ap.date >= now()')
-      .orderBy('ap.date', 'ASC')
-      .addOrderBy('sp.startTime', 'ASC')
+      .andWhere('appointments.date >= now()::date')
+      .orderBy('servicePeriod.startTime')
+      .addOrderBy('appointments.date')
       .getOne();
+
     return nextAppointmentEntity;
   }
 }

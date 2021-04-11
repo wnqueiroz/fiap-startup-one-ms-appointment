@@ -92,7 +92,6 @@ export class AppointmentsController {
     @GetCurrentUser() user: CurrentUserDTO,
   ): Promise<AppointmentDTO> {
     const { id } = user;
-    console.log(id);
 
     const appointmentEntity = await this.appointmentsService.getNext(id);
 
