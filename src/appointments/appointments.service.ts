@@ -21,12 +21,14 @@ export class AppointmentsService {
   ) {}
 
   getAll(idUser: string): Promise<AppointmentEntity[]> {
-    return this.appointmentRepository.find({
-      where: {
-        idUser,
-      },
-      relations: ['service', 'servicePeriod', 'appointmentStatus'],
-    });
+    return this.appointmentRepository
+      .createQueryBuilder('appointments')
+      .innerJoinAndSelect('appointments.service', 'service')
+      .innerJoinAndSelect('appointments.servicePeriod', 'servicePeriod')
+      .where('appointments.idUser = :id', { id: idUser })
+      .orderBy('servicePeriod.startTime')
+      .addOrderBy('appointments.date')
+      .getMany();
   }
 
   async getOne(id: string): Promise<AppointmentEntity> {

@@ -103,12 +103,7 @@ describe('AppointmentsService', () => {
   });
 
   describe('getAll', () => {
-    it('should return all created appointments', async () => {
-      const result = [appointmentEntity];
-
-      jest.spyOn(appointmentRepository, 'find').mockResolvedValueOnce(result);
-      expect(await appointmentsService.getAll('idAppointment')).toBe(result);
-    });
+    it.todo('should return all created appointments');
   });
 
   describe('getOne', () => {
