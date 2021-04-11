@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.6.0...1.6.1) (2021-04-11)
+
+
+### Correções de erros
+
+* adding price in service creation ([c986a75](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/c986a75dec1e7fb880eadaf95525a6103a741822))
+
 ## [1.6.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.5.0...1.6.0) (2021-04-10)
 
 
