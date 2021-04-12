@@ -1,6 +1,6 @@
 {
   "name": "ms-appointment",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Microservice to centralize business rules related only to the appointments",
   "author": {
     "name": "William Queiroz",

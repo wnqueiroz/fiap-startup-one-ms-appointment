@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.4](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.6.3...1.6.4) (2021-04-12)
+
+
+### Correções de erros
+
+* adjusting GET /v1/appointments/next (use date with America/Sao_Paulo timezone) ([1445bd1](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/1445bd1baa23bde470093fe79a08044018825749))
+
 ### [1.6.3](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.6.2...1.6.3) (2021-04-12)
 
 
