@@ -114,7 +114,13 @@ export class AppointmentsService {
       .andWhere('appointments.idAppointmentStatus = :status', {
         status: APPOINTMENT_STATUS.PENDING,
       })
-      .andWhere('appointments.date >= now()::date')
+      .andWhere(`appointments.date >= :date`, {
+        date: new Date()
+          .toLocaleString('en-US', {
+            timeZone: 'America/Sao_Paulo',
+          })
+          .split(',')[0],
+      })
       .orderBy('servicePeriod.startTime')
       .addOrderBy('appointments.date')
       .getOne();
