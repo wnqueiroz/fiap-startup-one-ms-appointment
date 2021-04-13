@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.6.4...1.7.0) (2021-04-13)
+
+
+### Funcionalidades
+
+* removing unavailable service periods from GET /v1/services?name=? ([ee8c5f3](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/commit/ee8c5f31ce9aa55e06c6056ad629bd41b2833596))
+
 ### [1.6.4](https://github.com/wnqueiroz/fiap-startup-one-ms-appointment/compare/1.6.3...1.6.4) (2021-04-12)
 
 
