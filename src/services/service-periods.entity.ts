@@ -33,7 +33,7 @@ export class ServicePeriodsEntity {
 
   @OneToMany(
     () => AppointmentEntity,
-    appointment => appointment.id,
+    appointment => appointment.servicePeriod,
   )
   appointments: AppointmentEntity[];
 

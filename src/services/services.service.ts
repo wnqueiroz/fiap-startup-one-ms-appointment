@@ -18,13 +18,48 @@ export class ServicesService {
     private servicePeriodsRepository: Repository<ServicePeriodsEntity>,
   ) {}
 
-  async getServiceByName(name: string): Promise<ServiceEntity[]> {
-    const serviceEntities = await this.servicesRepository
+  async getServiceByName(name: string): Promise<any[]> {
+    let serviceEntities = await this.servicesRepository
       .createQueryBuilder('services')
+      .leftJoinAndSelect(
+        'services.appointments',
+        'appointments',
+        'appointments.idAppointmentStatus = :idAppointmentStatus',
+        {
+          idAppointmentStatus: APPOINTMENT_STATUS.PENDING,
+        },
+      )
       .innerJoinAndSelect('services.servicePeriods', 'servicePeriods')
       .where('LOWER(name) LIKE :name', { name: `%${name.toLowerCase()}%` })
       .getMany();
-    return serviceEntities;
+
+    serviceEntities = serviceEntities.map(serviceEntity => {
+      const { appointments = [] } = serviceEntity;
+      let { servicePeriods } = serviceEntity;
+
+      delete serviceEntity.appointments;
+
+      // todos os horários livres
+      if (!appointments.length) return serviceEntity;
+
+      const unavailableServicePeriodsIds = appointments.map(
+        ({ idServicePeriod }) => idServicePeriod,
+      );
+
+      servicePeriods = servicePeriods.filter(
+        servicePeriod =>
+          !unavailableServicePeriodsIds.includes(servicePeriod.id),
+      );
+
+      return servicePeriods.length
+        ? {
+            ...serviceEntity,
+            servicePeriods,
+          }
+        : null;
+    });
+
+    return serviceEntities.filter(Boolean);
   }
 
   async getOne(id: string): Promise<ServiceEntity> {
